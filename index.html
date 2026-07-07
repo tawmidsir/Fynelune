@@ -9,240 +9,132 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#FAFAF8;
-    --bg-alt:#F1F0EA;
-    --panel:#FFFFFF;
-    --ink:#15171B;
-    --ink-soft:#4A4E57;
-    --muted:#83878F;
-    --rule:#E3E1DB;
-
-    --research:#2F6F4E;
-    --research-soft:#E4EFE9;
-    --space:#3646A6;
-    --space-soft:#E7E9F8;
-    --nuclear:#B5450F;
-    --nuclear-soft:#F7E7DD;
+    --bg:#FAFAF8; --bg-alt:#F1F0EA; --panel:#FFFFFF;
+    --ink:#15171B; --ink-soft:#4A4E57; --muted:#83878F; --rule:#E3E1DB;
+    --research:#2F6F4E; --research-soft:#E4EFE9;
+    --space:#3646A6; --space-soft:#E7E9F8;
+    --nuclear:#B5450F; --nuclear-soft:#F7E7DD;
   }
-
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:'Inter', sans-serif;
-    font-size:16px;
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
-  }
-
-  h1,h2,h3{
-    font-family:'Fraunces', serif;
-    font-weight:500;
-    letter-spacing:-0.01em;
-    margin:0;
-    color:var(--ink);
-  }
-
+  body{margin:0; background:var(--bg); color:var(--ink); font-family:'Inter',sans-serif; font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important; scroll-behavior:auto !important;} }
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:500; letter-spacing:-0.01em; margin:0; color:var(--ink);}
   .mono{font-family:'IBM Plex Mono', monospace;}
   a{color:inherit;}
   :focus-visible{outline:2px solid var(--ink); outline-offset:3px;}
-
   .wrap{max-width:1080px; margin:0 auto; padding:0 32px;}
   @media (max-width:640px){ .wrap{padding:0 20px;} }
 
-  /* ---------- NAV ---------- */
-  header{
-    position:sticky; top:0; z-index:50;
-    background:rgba(250,250,248,0.86);
-    backdrop-filter:blur(10px);
-    border-bottom:1px solid var(--rule);
-  }
-  nav{
-    display:flex; align-items:center; justify-content:space-between;
-    height:64px;
-  }
-  .logo{
-    font-family:'Fraunces', serif;
-    font-size:1.15rem;
-    font-weight:600;
-    letter-spacing:-0.01em;
-    text-decoration:none;
-    display:flex; align-items:center; gap:8px;
-  }
+  header{position:sticky; top:0; z-index:60; background:rgba(250,250,248,0.86); backdrop-filter:blur(10px); border-bottom:1px solid var(--rule);}
+  nav{display:flex; align-items:center; justify-content:space-between; height:64px; position:relative;}
+  .logo{font-family:'Fraunces',serif; font-size:1.15rem; font-weight:600; letter-spacing:-0.01em; text-decoration:none; display:flex; align-items:center; gap:8px;}
   .logo .dot{width:7px; height:7px; border-radius:50%; background:var(--ink); display:inline-block;}
-  .navlinks{display:flex; gap:32px; align-items:center;}
-  .navlinks a{
-    font-size:0.88rem; text-decoration:none; color:var(--ink-soft);
-    transition:color .15s ease;
-  }
-  .navlinks a:hover{color:var(--ink);}
-  .navlinks .gh{
-    color:var(--ink); border:1px solid var(--rule); padding:7px 14px;
-    border-radius:100px; font-size:0.82rem;
-  }
-  .navlinks .gh:hover{background:var(--ink); color:var(--bg); border-color:var(--ink);}
-  .navtoggle{display:none;}
-  @media (max-width:760px){
-    .navlinks{display:none;}
-  }
+  .nav-icons{display:flex; align-items:center; gap:8px;}
+  .icon-btn{width:38px; height:38px; display:flex; align-items:center; justify-content:center; border-radius:50%; border:1px solid var(--rule); background:var(--panel); cursor:pointer; color:var(--ink); transition:border-color .15s ease; padding:0;}
+  .icon-btn:hover{border-color:var(--ink-soft);}
+  .icon-btn svg{width:17px; height:17px;}
+  .menu-lines{position:relative; width:16px; height:12px;}
+  .menu-lines span{position:absolute; left:0; width:100%; height:1.4px; background:var(--ink); transition:transform .25s ease, opacity .2s ease, top .25s ease;}
+  .menu-lines span:nth-child(1){top:0;} .menu-lines span:nth-child(2){top:5.5px;} .menu-lines span:nth-child(3){top:11px;}
+  .icon-btn[aria-expanded="true"] .menu-lines span:nth-child(1){top:5.5px; transform:rotate(45deg);}
+  .icon-btn[aria-expanded="true"] .menu-lines span:nth-child(2){opacity:0;}
+  .icon-btn[aria-expanded="true"] .menu-lines span:nth-child(3){top:5.5px; transform:rotate(-45deg);}
 
-  /* ---------- HERO ---------- */
-  .hero{
-    padding:96px 0 72px;
-    position:relative;
-    overflow:hidden;
-  }
-  .hero-grid{
-    display:grid;
-    grid-template-columns:1.15fr 0.85fr;
-    gap:40px;
-    align-items:center;
-  }
-  @media (max-width:860px){
-    .hero-grid{grid-template-columns:1fr;}
-    .hero-orbit{margin-top:40px; justify-self:center;}
-  }
-  .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.76rem;
-    letter-spacing:0.08em;
-    text-transform:uppercase;
-    color:var(--muted);
-    margin-bottom:22px;
-    display:flex; gap:10px; align-items:center;
-  }
+  .floating-nav{position:absolute; top:52px; right:0; min-width:210px; background:var(--panel); border:1px solid var(--rule); border-radius:14px; box-shadow:0 12px 32px rgba(20,20,20,0.09); padding:10px; opacity:0; visibility:hidden; transform:translateY(-6px); transition:opacity .18s ease, transform .18s ease, visibility .18s; z-index:70;}
+  .floating-nav.open{opacity:1; visibility:visible; transform:translateY(0);}
+  .floating-nav a{display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-radius:8px; font-size:0.9rem; text-decoration:none; color:var(--ink-soft); transition:background .15s ease, color .15s ease;}
+  .floating-nav a:hover{background:var(--bg-alt); color:var(--ink);}
+  .floating-nav .fn-tag{font-family:'IBM Plex Mono', monospace; font-size:0.65rem; color:var(--muted);}
+  .floating-nav hr{border:none; border-top:1px solid var(--rule); margin:6px 4px;}
+
+  .search-overlay{position:fixed; inset:0; z-index:80; background:rgba(250,250,248,0.97); backdrop-filter:blur(6px); opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s; display:flex; flex-direction:column; align-items:center; padding:100px 24px 40px; overflow-y:auto;}
+  .search-overlay.open{opacity:1; visibility:visible;}
+  .search-box{width:100%; max-width:640px; display:flex; align-items:center; gap:14px; border-bottom:1px solid var(--rule); padding-bottom:16px;}
+  .search-box svg{width:20px; height:20px; color:var(--muted); flex-shrink:0;}
+  #search-input{flex:1; border:none; background:transparent; outline:none; font-family:'Fraunces',serif; font-size:1.4rem; color:var(--ink);}
+  #search-input::placeholder{color:var(--muted); font-family:'Inter',sans-serif; font-size:1.1rem;}
+  .search-close{width:34px; height:34px; border-radius:50%; border:1px solid var(--rule); background:var(--panel); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  #search-results{width:100%; max-width:640px; margin-top:20px;}
+  .empty-msg{color:var(--muted); font-size:0.95rem; padding:20px 0;}
+  .search-hint{color:var(--muted); font-size:0.85rem; margin-top:14px; font-family:'IBM Plex Mono', monospace;}
+
+  .hero{padding:96px 0 72px; position:relative; overflow:hidden;}
+  .hero-grid{display:grid; grid-template-columns:1.15fr 0.85fr; gap:40px; align-items:center;}
+  @media (max-width:860px){ .hero-grid{grid-template-columns:1fr;} .hero-orbit{margin-top:40px; justify-self:center;} }
+  .eyebrow{font-family:'IBM Plex Mono', monospace; font-size:0.76rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:22px; display:flex; gap:10px; align-items:center;}
   .eyebrow::before{content:""; width:16px; height:1px; background:var(--muted); display:inline-block;}
-  .hero h1{
-    font-size:clamp(2.3rem, 5vw, 3.6rem);
-    line-height:1.08;
-    max-width:15ch;
-  }
-  .hero p.lede{
-    margin-top:26px;
-    max-width:46ch;
-    font-size:1.08rem;
-    color:var(--ink-soft);
-  }
+  .hero h1{font-size:clamp(2.3rem,5vw,3.6rem); line-height:1.08; max-width:15ch;}
+  .hero p.lede{margin-top:26px; max-width:46ch; font-size:1.08rem; color:var(--ink-soft);}
   .hero-ctas{display:flex; gap:14px; margin-top:36px; flex-wrap:wrap;}
-  .btn{
-    font-size:0.9rem;
-    padding:12px 22px;
-    border-radius:100px;
-    text-decoration:none;
-    display:inline-flex; align-items:center; gap:8px;
-    transition:all .15s ease;
-    border:1px solid transparent;
-  }
-  .btn-primary{background:var(--ink); color:var(--bg);}
-  .btn-primary:hover{background:#000;}
-  .btn-outline{border-color:var(--rule); color:var(--ink);}
-  .btn-outline:hover{border-color:var(--ink);}
+  .btn{font-size:0.9rem; padding:12px 22px; border-radius:100px; text-decoration:none; display:inline-flex; align-items:center; gap:8px; transition:all .15s ease; border:1px solid transparent;}
+  .btn-primary{background:var(--ink); color:var(--bg);} .btn-primary:hover{background:#000;}
+  .btn-outline{border-color:var(--rule); color:var(--ink);} .btn-outline:hover{border-color:var(--ink);}
 
-  /* orbit signature */
   .hero-orbit{width:280px; height:280px; position:relative;}
   .hero-orbit svg{width:100%; height:100%; overflow:visible;}
   .orbit-path{fill:none; stroke:var(--rule); stroke-width:1;}
   .nucleus{fill:var(--ink);}
-  .electron{
-    width:9px; height:9px; border-radius:50%;
-    position:absolute; top:0; left:0;
-  }
+  .electron{width:9px; height:9px; border-radius:50%; position:absolute; top:0; left:0;}
   .e1{background:var(--research); offset-path:path("M 140,20 A 120,60 0 1 1 139.9,20"); animation:orbit1 9s linear infinite;}
   .e2{background:var(--space); offset-path:path("M 20,140 A 60,120 0 1 1 20.1,140"); animation:orbit2 12s linear infinite;}
   .e3{background:var(--nuclear); offset-path:path("M 40,40 A 100,100 0 1 1 39.9,40"); animation:orbit3 15s linear infinite reverse;}
-  @keyframes orbit1{ from{offset-distance:0%;} to{offset-distance:100%;} }
-  @keyframes orbit2{ from{offset-distance:0%;} to{offset-distance:100%;} }
-  @keyframes orbit3{ from{offset-distance:0%;} to{offset-distance:100%;} }
+  @keyframes orbit1{from{offset-distance:0%;} to{offset-distance:100%;}}
+  @keyframes orbit2{from{offset-distance:0%;} to{offset-distance:100%;}}
+  @keyframes orbit3{from{offset-distance:0%;} to{offset-distance:100%;}}
 
-  /* ---------- SECTION HEADERS ---------- */
+  .cat-hero{padding:88px 0 56px;}
+  .cat-hero .accent-bar{width:44px; height:4px; border-radius:2px; margin-bottom:24px;}
+  .cat-hero h1{font-size:clamp(2rem,4.4vw,3rem);}
+  .cat-hero p.lede{margin-top:20px; max-width:56ch; font-size:1.06rem; color:var(--ink-soft);}
+  .cat-hero .stat{margin-top:28px; font-family:'IBM Plex Mono', monospace; font-size:0.82rem; color:var(--muted);}
+
   section{padding:88px 0;}
   .section-head{max-width:60ch; margin-bottom:52px;}
-  .section-head .eyebrow{margin-bottom:16px;}
-  .section-head h2{font-size:clamp(1.7rem, 3vw, 2.3rem);}
+  .section-head h2{font-size:clamp(1.7rem,3vw,2.3rem);}
   .section-head p{color:var(--ink-soft); margin-top:16px; font-size:1.02rem;}
-
   .divider{border:none; border-top:1px solid var(--rule); margin:0;}
 
-  /* ---------- DIVISIONS ---------- */
-  .divisions{
-    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
-    background:var(--rule); border:1px solid var(--rule);
-  }
+  .pillars{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--rule); border:1px solid var(--rule); margin-top:8px;}
+  @media (max-width:860px){ .pillars{grid-template-columns:1fr;} }
+  .pillar{background:var(--panel); padding:32px 30px;}
+  .pillar .num{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--muted); margin-bottom:14px; display:block;}
+  .pillar h3{font-size:1.15rem; font-weight:500; margin-bottom:10px;}
+  .pillar p{margin:0; color:var(--ink-soft); font-size:0.94rem;}
+
+  .divisions{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--rule); border:1px solid var(--rule);}
   @media (max-width:860px){ .divisions{grid-template-columns:1fr;} }
-  .division{
-    background:var(--panel);
-    padding:36px 32px;
-    display:flex; flex-direction:column; gap:16px;
-  }
-  .division .tag{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
-    padding:5px 10px; border-radius:5px; width:fit-content;
-  }
+  .division{background:var(--panel); padding:36px 32px; display:flex; flex-direction:column; gap:16px; text-decoration:none; color:var(--ink); transition:background .15s ease;}
+  .division:hover{background:var(--bg-alt);}
+  .division .tag{font-family:'IBM Plex Mono', monospace; font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase; padding:5px 10px; border-radius:5px; width:fit-content;}
   .tag-research{background:var(--research-soft); color:var(--research);}
   .tag-space{background:var(--space-soft); color:var(--space);}
   .tag-nuclear{background:var(--nuclear-soft); color:var(--nuclear);}
   .division h3{font-size:1.3rem; font-weight:500;}
   .division p{color:var(--ink-soft); font-size:0.95rem; margin:0;}
-  .division .count{margin-top:auto; font-family:'IBM Plex Mono', monospace; font-size:0.8rem; color:var(--muted); padding-top:16px;}
+  .division .goto{font-size:0.85rem; margin-top:4px;}
 
-  /* ---------- LOG / FEED ---------- */
-  .filters{display:flex; gap:8px; margin-bottom:36px; flex-wrap:wrap;}
-  .filter-btn{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:0.78rem;
-    padding:8px 16px;
-    border-radius:100px;
-    border:1px solid var(--rule);
-    background:transparent;
-    color:var(--ink-soft);
-    cursor:pointer;
-    transition:all .15s ease;
-  }
-  .filter-btn:hover{border-color:var(--ink-soft);}
-  .filter-btn.active{background:var(--ink); color:var(--bg); border-color:var(--ink);}
-
-  .log-entry{
-    display:grid;
-    grid-template-columns:130px 1fr;
-    gap:28px;
-    padding:28px 0;
-    border-top:1px solid var(--rule);
-  }
+  .log-entry{display:grid; grid-template-columns:130px 1fr; gap:28px; padding:28px 0; border-top:1px solid var(--rule); scroll-margin-top:90px;}
+  .log-list.no-top-border .log-entry:first-child{border-top:none;}
   .log-entry:last-child{border-bottom:1px solid var(--rule);}
-  @media (max-width:640px){
-    .log-entry{grid-template-columns:1fr; gap:10px;}
-  }
+  @media (max-width:640px){ .log-entry{grid-template-columns:1fr; gap:10px;} }
+  .log-entry:target{background:var(--bg-alt);}
   .log-date{font-family:'IBM Plex Mono', monospace; font-size:0.82rem; color:var(--muted); padding-top:3px;}
   .log-body .tag-row{display:flex; gap:10px; align-items:center; margin-bottom:10px;}
-  .log-body .pill{
-    font-family:'IBM Plex Mono', monospace; font-size:0.7rem; letter-spacing:0.04em;
-    text-transform:uppercase; padding:3px 9px; border-radius:5px;
-  }
-  .log-body h4{font-family:'Fraunces', serif; font-weight:500; font-size:1.18rem; margin:0 0 8px;}
+  .log-body .pill{font-family:'IBM Plex Mono', monospace; font-size:0.7rem; letter-spacing:0.04em; text-transform:uppercase; padding:3px 9px; border-radius:5px;}
+  .log-body h4{font-family:'Fraunces',serif; font-weight:500; font-size:1.18rem; margin:0 0 8px;}
   .log-body p{margin:0; color:var(--ink-soft); font-size:0.96rem; max-width:65ch;}
   .log-body .readmore{display:inline-block; margin-top:12px; font-size:0.85rem; text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:1px;}
 
-  /* ---------- ABOUT ---------- */
   .about-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:60px;}
   @media (max-width:860px){ .about-grid{grid-template-columns:1fr; gap:32px;} }
   .about-grid p{color:var(--ink-soft); font-size:1.02rem; max-width:56ch;}
-  .about-grid p + p{margin-top:18px;}
-  .license-box{
-    background:var(--bg-alt); border:1px solid var(--rule); border-radius:10px;
-    padding:26px 26px;
-  }
+  .license-box{background:var(--bg-alt); border:1px solid var(--rule); border-radius:10px; padding:26px;}
   .license-box .mono{font-size:0.8rem; color:var(--muted); display:block; margin-bottom:6px;}
-  .license-box strong{font-family:'Fraunces', serif; font-weight:500; font-size:1.05rem; display:block; margin-bottom:14px;}
+  .license-box strong{font-family:'Fraunces',serif; font-weight:500; font-size:1.05rem; display:block; margin-bottom:14px;}
   .license-box ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:0.92rem;}
   .license-box li{margin-bottom:8px;}
 
-  /* ---------- FOOTER ---------- */
   footer{border-top:1px solid var(--rule); padding:44px 0;}
   .footer-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
   .footer-row .mono{color:var(--muted); font-size:0.8rem;}
@@ -257,19 +149,38 @@
   <div class="wrap">
     <nav>
       <a href="#top" class="logo"><span class="dot"></span>Fynelune</a>
-      <div class="navlinks">
-        <a href="#divisions">Divisions</a>
-        <a href="#log">Log</a>
-        <a href="#about">About</a>
-        <a href="https://github.com/tawmidsir" class="gh">GitHub</a>
+      <div class="nav-icons">
+        <button class="icon-btn" id="search-toggle" aria-label="Search research">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="icon-btn" id="nav-toggle" aria-label="Open navigation" aria-expanded="false">
+          <span class="menu-lines"><span></span><span></span><span></span></span>
+        </button>
+      </div>
+      <div class="floating-nav" id="floating-nav">
+        <a href="#top">Home <span class="fn-tag">/</span></a>
+        <a href="#research">Research <span class="fn-tag">01</span></a>
+        <a href="#space">Space Research <span class="fn-tag">02</span></a>
+        <a href="#nuclear">Nuclear &amp; Radiation <span class="fn-tag">03</span></a>
+        <hr>
+        <a href="https://github.com/">GitHub â†—</a>
       </div>
     </nav>
   </div>
 </header>
 
+<div class="search-overlay" id="search-overlay">
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="search-input" placeholder="Search all researchâ€¦" autocomplete="off">
+    <button class="search-close" id="search-close" aria-label="Close search">âœ•</button>
+  </div>
+  <div class="search-hint">Searching titles, summaries, and divisions across every entry.</div>
+  <div id="search-results"></div>
+</div>
+
 <main id="top">
 
-  <!-- HERO -->
   <section class="hero">
     <div class="wrap hero-grid">
       <div>
@@ -277,7 +188,7 @@
         <h1>Science, published the day it happens.</h1>
         <p class="lede">Fynelune is an open research collective working across three fields â€” general research, space, and nuclear &amp; radiation â€” publishing every finding in the open, for anyone to read, question, or build on.</p>
         <div class="hero-ctas">
-          <a href="#log" class="btn btn-primary">Read today's log â†’</a>
+          <a href="#latest" class="btn btn-primary">Read the latest â†’</a>
           <a href="https://github.com/" class="btn btn-outline">View on GitHub</a>
         </div>
       </div>
@@ -297,136 +208,135 @@
 
   <hr class="divider">
 
-  <!-- DIVISIONS -->
-  <section id="divisions">
+  <section id="importance">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Why this exists</div>
+        <h2>The importance of open research</h2>
+        <p>Most research takes months to reach the public, if it ever does. Fynelune publishes as it happens â€” including the work that doesn't pan out â€” so anyone, anywhere, can learn from it immediately.</p>
+      </div>
+      <div class="pillars">
+        <div class="pillar">
+          <span class="num mono">Access</span>
+          <h3>No paywalls, no gatekeeping</h3>
+          <p>Every finding, dataset, and method is free to read and reuse the day it's written down â€” not after a journal cycle.</p>
+        </div>
+        <div class="pillar">
+          <span class="num mono">Transparency</span>
+          <h3>Including what didn't work</h3>
+          <p>Negative results and in-progress work are published alongside headline findings, because they're just as useful to the next researcher.</p>
+        </div>
+        <div class="pillar">
+          <span class="num mono">Trust</span>
+          <h3>Nothing quietly disappears</h3>
+          <p>Corrections and retractions are logged in the open, never deleted â€” the record stays honest as understanding improves.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="latest">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Updated daily</div>
+        <h2>Latest from the log</h2>
+      </div>
+      <div id="latest-list" class="log-list no-top-border"></div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="divisions-overview">
     <div class="wrap">
       <div class="section-head">
         <div class="eyebrow">Three fields, one archive</div>
-        <h2>How the work is organized</h2>
-        <p>Every division keeps its own notebook, but all of it lands in the same public log â€” nothing is held back for internal review beyond basic safety and accuracy checks.</p>
+        <h2>Explore by division</h2>
+        <p>Every division keeps its own notebook â€” jump straight to one below, or scroll down to see all three.</p>
       </div>
     </div>
     <div class="wrap" style="padding:0;">
       <div class="divisions">
-        <div class="division">
+        <a href="#research" class="division">
           <span class="tag tag-research">Research</span>
           <h3>Research</h3>
           <p>Foundational and applied inquiry across the sciences â€” open datasets, reproducible methods, and negative results included.</p>
-          <span class="count">142 entries logged</span>
-        </div>
-        <div class="division">
+          <span class="goto mono">Jump to division â†’</span>
+        </a>
+        <a href="#space" class="division">
           <span class="tag tag-space">Space Research</span>
           <h3>Space Research</h3>
           <p>Orbital mechanics, astrophysics, planetary science, and telemetry analysis from tracked missions and observation campaigns.</p>
-          <span class="count">67 entries logged</span>
-        </div>
-        <div class="division">
+          <span class="goto mono">Jump to division â†’</span>
+        </a>
+        <a href="#nuclear" class="division">
           <span class="tag tag-nuclear">Nuclear &amp; Radiation</span>
           <h3>Nuclear &amp; Radiation Research</h3>
           <p>Reactor physics, radiation safety, dosimetry, and isotope studies â€” reviewed for safety before every publication.</p>
-          <span class="count">54 entries logged</span>
-        </div>
+          <span class="goto mono">Jump to division â†’</span>
+        </a>
       </div>
     </div>
   </section>
 
   <hr class="divider">
 
-  <!-- LOG -->
-  <section id="log">
+  <section id="research" class="cat-hero">
     <div class="wrap">
-      <div class="section-head">
-        <div class="eyebrow">Updated daily</div>
-        <h2>The research log</h2>
-        <p>Every entry below is a placeholder â€” replace it with your team's real findings. Filter by division, or scroll the full feed.</p>
-      </div>
-
-      <div class="filters">
-        <button class="filter-btn active" data-filter="all">All</button>
-        <button class="filter-btn" data-filter="research">Research</button>
-        <button class="filter-btn" data-filter="space">Space</button>
-        <button class="filter-btn" data-filter="nuclear">Nuclear &amp; Radiation</button>
-      </div>
-
-      <div id="log-list">
-
-        <article class="log-entry" data-cat="space">
-          <div class="log-date mono">2026.07.06</div>
-          <div class="log-body">
-            <div class="tag-row"><span class="pill tag-space">Space</span></div>
-            <h4>Tracking an anomaly in Node-7's orbital decay rate</h4>
-            <p>Telemetry from the past 30 days shows decay slightly faster than modeled. Raw tracking data and our correction model are attached for review.</p>
-            <a href="#" class="readmore">Read entry â†’</a>
-          </div>
-        </article>
-
-        <article class="log-entry" data-cat="nuclear">
-          <div class="log-date mono">2026.07.05</div>
-          <div class="log-body">
-            <div class="tag-row"><span class="pill tag-nuclear">Nuclear &amp; Radiation</span></div>
-            <h4>Background gamma survey results â€” Site A, Q2</h4>
-            <p>Quarterly ambient dose readings across five monitoring posts, all within expected background range. Full dataset and instrument calibration notes included.</p>
-            <a href="#" class="readmore">Read entry â†’</a>
-          </div>
-        </article>
-
-        <article class="log-entry" data-cat="research">
-          <div class="log-date mono">2026.07.04</div>
-          <div class="log-body">
-            <div class="tag-row"><span class="pill tag-research">Research</span></div>
-            <h4>Open dataset release: five years of field observations</h4>
-            <p>We're releasing a cleaned, documented version of our long-running field dataset under an open license, along with the scripts used to process it.</p>
-            <a href="#" class="readmore">Read entry â†’</a>
-          </div>
-        </article>
-
-        <article class="log-entry" data-cat="space">
-          <div class="log-date mono">2026.07.03</div>
-          <div class="log-body">
-            <div class="tag-row"><span class="pill tag-space">Space</span></div>
-            <h4>Reprocessing last month's occultation observations</h4>
-            <p>A second pass through last month's stellar occultation data using an improved noise filter, with updated atmospheric density estimates.</p>
-            <a href="#" class="readmore">Read entry â†’</a>
-          </div>
-        </article>
-
-        <article class="log-entry" data-cat="research">
-          <div class="log-date mono">2026.07.02</div>
-          <div class="log-body">
-            <div class="tag-row"><span class="pill tag-research">Research</span></div>
-            <h4>Replicating a peer result on soil microbial diversity</h4>
-            <p>An independent replication attempt of a recently published finding â€” results, deviations, and full lab notes shared as they came in.</p>
-            <a href="#" class="readmore">Read entry â†’</a>
-          </div>
-        </article>
-
-        <article class="log-entry" data-cat="nuclear">
-          <div class="log-date mono">2026.07.01</div>
-          <div class="log-body">
-            <div class="tag-row"><span class="pill tag-nuclear">Nuclear &amp; Radiation</span></div>
-            <h4>Dosimeter calibration drift over 12 months</h4>
-            <p>A year of calibration logs for our field dosimeters, showing measurable drift and the correction schedule we're adopting going forward.</p>
-            <a href="#" class="readmore">Read entry â†’</a>
-          </div>
-        </article>
-
-      </div>
+      <div class="accent-bar" style="background:#2F6F4E;"></div>
+      <div class="eyebrow">Division 01</div>
+      <h1>Research</h1>
+      <p class="lede">Foundational and applied inquiry across the sciences â€” open datasets, reproducible methods, and negative results included.</p>
+      <div class="stat mono" id="count-research"></div>
     </div>
+  </section>
+  <section style="padding-top:0;">
+    <div class="wrap"><div id="list-research" class="log-list no-top-border"></div></div>
   </section>
 
   <hr class="divider">
 
-  <!-- ABOUT -->
+  <section id="space" class="cat-hero">
+    <div class="wrap">
+      <div class="accent-bar" style="background:#3646A6;"></div>
+      <div class="eyebrow">Division 02</div>
+      <h1>Space Research</h1>
+      <p class="lede">Orbital mechanics, astrophysics, planetary science, and telemetry analysis from tracked missions and observation campaigns.</p>
+      <div class="stat mono" id="count-space"></div>
+    </div>
+  </section>
+  <section style="padding-top:0;">
+    <div class="wrap"><div id="list-space" class="log-list no-top-border"></div></div>
+  </section>
+
+  <hr class="divider">
+
+  <section id="nuclear" class="cat-hero">
+    <div class="wrap">
+      <div class="accent-bar" style="background:#B5450F;"></div>
+      <div class="eyebrow">Division 03</div>
+      <h1>Nuclear &amp; Radiation Research</h1>
+      <p class="lede">Reactor physics, radiation safety, dosimetry, and isotope studies â€” reviewed for safety before every publication.</p>
+      <div class="stat mono" id="count-nuclear"></div>
+    </div>
+  </section>
+  <section style="padding-top:0;">
+    <div class="wrap"><div id="list-nuclear" class="log-list no-top-border"></div></div>
+  </section>
+
+  <hr class="divider">
+
   <section id="about">
     <div class="wrap about-grid">
       <div>
-        <div class="eyebrow">Why open</div>
-        <h2 style="font-size:clamp(1.6rem, 3vw, 2.1rem); margin-bottom:22px;">Research belongs to everyone who can use it.</h2>
-        <p>Fynelune publishes as it goes â€” daily notebook entries rather than polished papers months later. Negative results, in-progress work, and raw data all get the same treatment as headline findings.</p>
+        <div class="eyebrow">Terms</div>
+        <h2 style="font-size:clamp(1.6rem,3vw,2.1rem); margin-bottom:22px;">Open by default.</h2>
         <p>We're not affiliated with any government or commercial lab. Funding, methods, and every dataset we produce are disclosed in the open repository, and anyone is welcome to replicate, challenge, or extend the work.</p>
       </div>
       <div class="license-box">
-        <span class="mono">Terms</span>
+        <span class="mono">License</span>
         <strong>Open by default</strong>
         <ul>
           <li>Code and tools â€” MIT License</li>
@@ -452,19 +362,146 @@
 </footer>
 
 <script>
-  const buttons = document.querySelectorAll('.filter-btn');
-  const entries = document.querySelectorAll('.log-entry');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      buttons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      entries.forEach(entry => {
-        entry.style.display = (filter === 'all' || entry.dataset.cat === filter) ? 'grid' : 'none';
-      });
-    });
+const RESEARCH_DATA = [
+  {
+    id: 'space-node7-decay',
+    date: '2026-07-06',
+    category: 'space',
+    title: "Tracking an anomaly in Node-7's orbital decay rate",
+    summary: "Telemetry from the past 30 days shows decay slightly faster than modeled. Raw tracking data and our correction model are attached for review."
+  },
+  {
+    id: 'nuclear-sitea-q2-survey',
+    date: '2026-07-05',
+    category: 'nuclear',
+    title: "Background gamma survey results â€” Site A, Q2",
+    summary: "Quarterly ambient dose readings across five monitoring posts, all within expected background range. Full dataset and instrument calibration notes included."
+  },
+  {
+    id: 'research-open-dataset-release',
+    date: '2026-07-04',
+    category: 'research',
+    title: "Open dataset release: five years of field observations",
+    summary: "We're releasing a cleaned, documented version of our long-running field dataset under an open license, along with the scripts used to process it."
+  },
+  {
+    id: 'space-occultation-reprocessing',
+    date: '2026-07-03',
+    category: 'space',
+    title: "Reprocessing last month's occultation observations",
+    summary: "A second pass through last month's stellar occultation data using an improved noise filter, with updated atmospheric density estimates."
+  },
+  {
+    id: 'research-microbial-replication',
+    date: '2026-07-02',
+    category: 'research',
+    title: "Replicating a peer result on soil microbial diversity",
+    summary: "An independent replication attempt of a recently published finding â€” results, deviations, and full lab notes shared as they came in."
+  },
+  {
+    id: 'nuclear-dosimeter-drift',
+    date: '2026-07-01',
+    category: 'nuclear',
+    title: "Dosimeter calibration drift over 12 months",
+    summary: "A year of calibration logs for our field dosimeters, showing measurable drift and the correction schedule we're adopting going forward."
+  }
+];
+
+const CATEGORY_META = {
+  research: { label:'Research', color:'#2F6F4E', soft:'#E4EFE9', anchor:'#research' },
+  space:    { label:'Space Research', color:'#3646A6', soft:'#E7E9F8', anchor:'#space' },
+  nuclear:  { label:'Nuclear & Radiation Research', color:'#B5450F', soft:'#F7E7DD', anchor:'#nuclear' }
+};
+
+function formatDate(iso){ return iso.replace(/-/g, '.'); }
+
+function entryCardHTML(entry){
+  const meta = CATEGORY_META[entry.category];
+  return `
+    <article class="log-entry" id="entry-${entry.id}" data-cat="${entry.category}">
+      <div class="log-date mono">${formatDate(entry.date)}</div>
+      <div class="log-body">
+        <div class="tag-row"><span class="pill" style="background:${meta.soft};color:${meta.color}">${meta.label}</span></div>
+        <h4>${entry.title}</h4>
+        <p>${entry.summary}</p>
+        <a href="${meta.anchor}#entry-${entry.id}" class="readmore">Read entry â†’</a>
+      </div>
+    </article>`;
+}
+
+function sortedData(){ return [...RESEARCH_DATA].sort((a,b) => b.date.localeCompare(a.date)); }
+
+function renderLatest(containerId, n = 3){
+  document.getElementById(containerId).innerHTML = sortedData().slice(0, n).map(entryCardHTML).join('');
+}
+
+function renderCategory(containerId, category){
+  const filtered = sortedData().filter(e => e.category === category);
+  document.getElementById(containerId).innerHTML = filtered.length
+    ? filtered.map(entryCardHTML).join('')
+    : '<p class="empty-msg">No entries published in this division yet â€” check back soon.</p>';
+}
+
+function initFloatingNav(){
+  const btn = document.getElementById('nav-toggle');
+  const panel = document.getElementById('floating-nav');
+  let closeTimer = null, isOpen = false;
+
+  function openPanel(){
+    isOpen = true; panel.classList.add('open'); btn.setAttribute('aria-expanded','true');
+    clearTimeout(closeTimer); closeTimer = setTimeout(closePanel, 5000);
+  }
+  function closePanel(){
+    isOpen = false; panel.classList.remove('open'); btn.setAttribute('aria-expanded','false');
+    clearTimeout(closeTimer); closeTimer = null;
+  }
+  btn.addEventListener('click', (e) => { e.stopPropagation(); isOpen ? closePanel() : openPanel(); });
+  document.addEventListener('click', (e) => { if (isOpen && !panel.contains(e.target) && e.target !== btn) closePanel(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen) closePanel(); });
+}
+
+function initSearch(){
+  const overlay = document.getElementById('search-overlay');
+  const openBtn = document.getElementById('search-toggle');
+  const closeBtn = document.getElementById('search-close');
+  const input = document.getElementById('search-input');
+  const results = document.getElementById('search-results');
+
+  function open(){ overlay.classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>input.focus(),60); }
+  function close(){ overlay.classList.remove('open'); document.body.style.overflow=''; input.value=''; results.innerHTML=''; }
+
+  openBtn.addEventListener('click', (e) => { e.stopPropagation(); open(); });
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim().toLowerCase();
+    if (!q) { results.innerHTML = ''; return; }
+    const matches = sortedData().filter(e =>
+      e.title.toLowerCase().includes(q) ||
+      e.summary.toLowerCase().includes(q) ||
+      CATEGORY_META[e.category].label.toLowerCase().includes(q)
+    );
+    results.innerHTML = matches.length ? matches.map(entryCardHTML).join('') : '<p class="empty-msg">No entries match your search.</p>';
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderLatest('latest-list', 3);
+  renderCategory('list-research', 'research');
+  renderCategory('list-space', 'space');
+  renderCategory('list-nuclear', 'nuclear');
+
+  ['research','space','nuclear'].forEach(cat => {
+    const n = RESEARCH_DATA.filter(e => e.category === cat).length;
+    document.getElementById('count-' + cat).textContent = n + (n === 1 ? ' entry logged' : ' entries logged');
+  });
+
+  initFloatingNav();
+  initSearch();
+});
 </script>
 
 </body>
-  </html>
+            </html>
